@@ -25,6 +25,18 @@ $$ \dot{\hat{\Theta}} = -\Gamma \Phi(x) s^T $$
 
 More details are provided in the paper TODO.
 
+
+# Installation
+To install the package, clone the repository and install editable version via pip:
+``` bash
+git clone <url>
+cd manipulator-adaptive-control
+pip install requirements.txt
+```
+
+# Examples
+Examples of how to use the package can be found in the `examples` directory.
+
 # BibTeX
 If you use this package, please cite it using the following:
 ```
