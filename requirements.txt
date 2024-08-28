@@ -1,0 +1,17 @@
+contourpy==1.1.1
+cycler==0.12.1
+fonttools==4.53.1
+importlib_resources==6.4.4
+kiwisolver==1.4.5
+-e git+ssh://git@github.com/byu-rad-lab/manipulator-adaptive-control.git@e3a556910f59b244964a81ad73444e1230a810cf#egg=manipulator_adaptive_control
+matplotlib==3.7.5
+numpy==1.24.4
+packaging==24.1
+pillow==10.4.0
+pkg_resources==0.0.0
+pyparsing==3.1.4
+python-dateutil==2.9.0.post0
+scipy==1.10.1
+six==1.16.0
+typing==3.7.4.3
+zipp==3.20.1
