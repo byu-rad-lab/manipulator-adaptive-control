@@ -24,7 +24,7 @@ class RBFNNAdaptiveController:
     ):
         self.n = num_gen_coords
         self.N = self.n * 4
-        self.M = numberOfRBFCenters
+        self.P = numberOfRBFCenters
 
         assert len(RBFmins) == self.N
         assert len(RBFmaxes) == self.N
@@ -35,11 +35,11 @@ class RBFNNAdaptiveController:
         self.RBFmaxes = RBFmaxes  # should be same length as x in Phi(x)
 
         self.theta_hat = 0 * np.random.uniform(
-            -1, 1, size=(self.M + 1, self.n))
-        self.Gamma = np.eye(self.M + 1) * np.atleast_1d(Gamma)
+            -1, 1, size=(self.P + 1, self.n))
+        self.Gamma = np.eye(self.P + 1) * np.atleast_1d(Gamma)
         self.Lambda = np.eye(self.n) * np.atleast_1d(Lambda)
 
-        self.Lambda_2 = np.eye(self.M) * 1
+        self.Lambda_2 = np.eye(self.P) * 1
         self.Kd = np.eye(self.n) * KD
         self.dt = ctrl_dt
         self.zeta = zeta
@@ -48,11 +48,11 @@ class RBFNNAdaptiveController:
         self._create_desired_system(zeta, time_constant, ctrl_dt)
 
         self.center_hat = initialize_lhs(RBFmins, RBFmaxes,
-                                         self.M)  #self.M x self.N
+                                         self.P)  #self.P x self.N
 
         # dMax is the max distance between centers
         self.dMax = calculate_max_distance(self.center_hat)
-        self.width = self.M / self.dMax**2
+        self.width = self.P / self.dMax**2
 
         self.q_des = np.zeros([self.n])
         self.qdot_des = np.zeros([self.n])
@@ -175,7 +175,19 @@ class RBFNNAdaptiveController:
         qddot_des: npt.NDArray[np.float64] = None,
         adapt=True,
     ) -> npt.NDArray[np.float64]:
+        """Applies control law, optionally generates desired trajectory and adapts weights.
 
+        Args:
+            q (npt.NDArray[np.float64]): current configuration positions    
+            qdot (npt.NDArray[np.float64]): current configuration velocities
+            q_des (npt.NDArray[np.float64]): desired configuration positions
+            qdot_des (npt.NDArray[np.float64], optional): desired configuration velocities. Defaults to None.
+            qddot_des (npt.NDArray[np.float64], optional): desired configuration accelerations. Defaults to None.
+            adapt (bool, optional): Option to adapt weights. Defaults to True.
+
+        Returns:
+            npt.NDArray[np.float64]: TODO, lots of returns needs cleaning up
+        """
         # given qd_des and qdd_des from somewhere, I calculate a desired trajectory. A conventient
         # choice for obtaining qd_des and qdd_des is to use a critically damped 2nd roder system.
         # if qdot_des and qddot_des are not provided, I will use the internal trajectory generator to calculate them.
