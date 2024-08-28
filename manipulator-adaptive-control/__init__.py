@@ -1,0 +1,2 @@
+#from manipulator-adaptive-control import RBFNNAdaptiveController
+from .rbfnn_adaptive_controller import RBFNNAdaptiveController 
