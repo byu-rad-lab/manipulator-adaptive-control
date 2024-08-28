@@ -210,15 +210,12 @@ class RBFNNAdaptiveController:
         Phi = self._calc_regressor(q, qdot, qdot_ref, qddot_ref)
         s = qdot - qdot_ref
 
-        if adapt:
-            error = q_des - q
-            # if np.any(np.abs(np.degrees(error)) > 0.005):
-            # print(f"adapting, errpr:{error}")
-            self._update_weights(s, Phi)
-
         tauFF = self.theta_hat.T @ Phi
         tauPD = self.Kd @ s
         tau = tauFF - tauPD
+
+        if adapt:
+            self._update_weights(s, Phi)
 
         return tau, s, self.theta_hat, tauFF, tauPD, q_des, qdot_des, qddot_des
 
